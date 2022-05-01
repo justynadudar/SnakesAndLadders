@@ -12,7 +12,7 @@ public class Player extends Circle {
         this.playerXPosition = 22.5;
         this.playerYPosition = 427.5;
         this.playerPosition = 1;
-        this.playerTurn = true;
+        this.playerTurn = false;
         this.getStyleClass().add("style.css");
         this.setRadius(radius);
         this.setId(id);
