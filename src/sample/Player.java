@@ -30,4 +30,12 @@ public class Player extends Circle {
         else
             this.playerTurn = true;
     }
+
+    public int getPlayerPosition() {
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(int playerPosition) {
+        this.playerPosition = playerPosition;
+    }
 }
