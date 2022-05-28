@@ -13,7 +13,7 @@
             <Image url="@../resources/Component%201.png" />
          </image>
       </ImageView>
-      <Button layoutX="440.0" layoutY="335.0" mnemonicParsing="false" onAction="#btnAction" prefHeight="45.0" prefWidth="125.0" style="-fx-background-color: #3F2CB6; -fx-background-radius: 25px;" text="ROLL" textAlignment="CENTER" textFill="WHITE">
+      <Button layoutX="440.0" layoutY="335.0" mnemonicParsing="false" onAction="#rollClicked" prefHeight="45.0" prefWidth="125.0" style="-fx-background-color: #3F2CB6; -fx-background-radius: 25px;" text="ROLL" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Segoe UI Bold" size="24.0" />
          </font></Button>
@@ -22,12 +22,12 @@
             <Image url="@../resources/Component%202.png" />
          </image>
       </ImageView>
-      <Button layoutX="585.0" layoutY="335.0" mnemonicParsing="false" onAction="#btnAction" prefHeight="45.0" prefWidth="125.0" style="-fx-background-color: #FF0000; -fx-background-radius: 25px;" text="EXIT" textAlignment="CENTER" textFill="WHITE">
+      <Button layoutX="585.0" layoutY="335.0" mnemonicParsing="false" onAction="#exitClicked" prefHeight="45.0" prefWidth="125.0" style="-fx-background-color: #FF0000; -fx-background-radius: 25px;" text="EXIT" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Segoe UI Bold" size="24.0" />
          </font>
       </Button>
-      <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="475.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="dice" fx:id="dice" fitHeight="150.0" fitWidth="150.0" layoutX="500.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/dice_0.png" />
          </image>
