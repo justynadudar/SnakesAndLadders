@@ -1,12 +1,21 @@
 package sample;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 
 public class Player extends Circle {
-    private int playerPosition;
     private boolean playerTurn;
     private static double playerXPosition;
     private static double playerYPosition;
+
+    private int playerPosition;
+    private Tile tileThePlayerIsOn;
+    private ImageView playerImage;
+
+    public Player(ImageView image){
+        this.playerPosition = 1;
+        this.playerImage = image;
+    }
 
     public Player(double radius, String id){
         this.playerXPosition = 22.5;
@@ -37,5 +46,17 @@ public class Player extends Circle {
 
     public void setPlayerPosition(int playerPosition) {
         this.playerPosition = playerPosition;
+    }
+
+    public void setTileThePlayerIsOn(Tile tileThePlayerIsOn) {
+        this.tileThePlayerIsOn = tileThePlayerIsOn;
+    }
+
+    public Tile getTileThePlayerIsOn() {
+        return tileThePlayerIsOn;
+    }
+
+    public ImageView getPlayerImage() {
+        return playerImage;
     }
 }
