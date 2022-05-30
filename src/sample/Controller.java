@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,12 @@ public class Controller {
     @FXML
     private ImageView playerBlueImage;
 
+    @FXML
+    private Text textDiceValue;
+
+    @FXML
+    private Text textBeforeValue;
+
     ArrayList<Tile> board = new ArrayList<>();
 
 //    @FXML
@@ -33,15 +40,37 @@ public class Controller {
     Player playerBlue;
 //    Player playerYellow = new Player(playerYellowImage);
 
-    void changeDiceImage(int diceValue){
-        dice.setImage(Dice.getDiceImages().get(diceValue));
+    void changeDiceImageAndText(int value){
+        textDiceValue.setText(String.valueOf(value));
+        dice.setImage(Dice.getDiceImages().get(value));
+        textDiceValue.setText(String.valueOf(value));
     }
 
     void changeTile(int diceValue, Player player){
         int previousTileIndex = board.indexOf(player.getTileThePlayerIsOn());
-        player.setTileThePlayerIsOn(board.get(previousTileIndex+diceValue));
+
+        if(previousTileIndex+diceValue > 99) player.setTileThePlayerIsOn(board.get(previousTileIndex));
+        else player.setTileThePlayerIsOn(board.get(previousTileIndex+diceValue));
+
+        if(player.getTileThePlayerIsOn().getSnake() != null){
+            player.setTileThePlayerIsOn(player.getTileThePlayerIsOn().getSnake().endTile);
+        }
+        else if(player.getTileThePlayerIsOn().getLadder() != null){
+            player.setTileThePlayerIsOn(player.getTileThePlayerIsOn().getLadder().endTile);
+        }
+
         player.getPlayerImage().setLayoutX(player.getTileThePlayerIsOn().getX());
         player.getPlayerImage().setLayoutY(player.getTileThePlayerIsOn().getY());
+
+        if(player.getTileThePlayerIsOn().getId() == 100){
+            btnPlay.setVisible(true);
+            btnRoll.setVisible(false);
+            btnExit.setVisible(false);
+            dice.setVisible(false);
+            textDiceValue.setVisible(false);
+            textBeforeValue.setText("    You win!");
+
+        }
     }
 
     @FXML
@@ -49,6 +78,8 @@ public class Controller {
         btnPlay.setVisible(false);
         btnRoll.setVisible(true);
         btnExit.setVisible(true);
+        textBeforeValue.setVisible(true);
+        textBeforeValue.setText("  Your move!");
 
         //TODO check which player's turn
         playerBlue = new Player(playerBlueImage);
@@ -72,6 +103,21 @@ public class Controller {
             }
             else x += operation;
         }
+
+        Snake snake1 = new Snake(board.get(58),board.get(19));
+        board.get(58).setSnake(snake1);
+        Snake snake2 = new Snake(board.get(94),board.get(66));
+        board.get(94).setSnake(snake2);
+        Ladder ladder1 = new Ladder(board.get(6),board.get(28));
+        board.get(6).setLadder(ladder1);
+        Ladder ladder2 = new Ladder(board.get(35),board.get(43));
+        board.get(35).setLadder(ladder2);
+        Ladder ladder3 = new Ladder(board.get(47),board.get(51));
+        board.get(47).setLadder(ladder3);
+        Ladder ladder4 = new Ladder(board.get(63),board.get(81));
+        board.get(63).setLadder(ladder4);
+
+
         playerBlue.setTileThePlayerIsOn(board.get(0));
 
         playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
@@ -89,35 +135,36 @@ public class Controller {
 
     @FXML
     void rollClicked(ActionEvent event) {
-
+        textDiceValue.setVisible(true);
+        textBeforeValue.setText("You rolled:");
         int a = Dice.getRandomValue();
         switch (a){
             case 1:
-                changeDiceImage(1);
+                changeDiceImageAndText(1);
                 changeTile(1, playerBlue);
                 break;
             case 2:
-                changeDiceImage(2);
+                changeDiceImageAndText(2);
                 changeTile(2, playerBlue);
                 break;
             case 3:
-                changeDiceImage(3);
+                changeDiceImageAndText(3);
                 changeTile(3, playerBlue);
                 break;
             case 4:
-                changeDiceImage(4);
+                changeDiceImageAndText(4);
                 changeTile(4, playerBlue);
                 break;
             case 5:
-                changeDiceImage(5);
+                changeDiceImageAndText(5);
                 changeTile(5, playerBlue);
                 break;
             case 6:
-                changeDiceImage(6);
+                changeDiceImageAndText(6);
                 changeTile(6, playerBlue);
                 break;
             default:
-                changeDiceImage(0);
+                changeDiceImageAndText(0);
         }
 
     }

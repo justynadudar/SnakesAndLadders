@@ -17,6 +17,22 @@ public class Tile {
         this.y = y;
     }
 
+    public void setSnake(Snake snake) {
+        this.snake = snake;
+    }
+
+    public void setLadder(Ladder ladder) {
+        this.ladder = ladder;
+    }
+
+    public Snake getSnake() {
+        return snake;
+    }
+
+    public Ladder getLadder() {
+        return ladder;
+    }
+
     public int getId() {
         return id;
     }
