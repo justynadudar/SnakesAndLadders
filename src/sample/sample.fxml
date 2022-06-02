@@ -68,8 +68,8 @@
             <Image url="@../resources/player_yellow.png" />
          </image>
       </ImageView>
-      <TextField fx:id="ipInput" layoutX="475.0" layoutY="150.0" prefHeight="40.0" prefWidth="200.0" promptText="IP ADDRESS" style="-fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-padding: 0 0 0 15px;" />
-      <TextField fx:id="portInput" layoutX="475.0" layoutY="210.0" prefHeight="40.0" prefWidth="200.0" promptText="PORT" style="-fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-padding: 0 0 0 15px;">
+      <TextField fx:id="ipInput" layoutX="475.0" layoutY="150.0" prefHeight="40.0" prefWidth="200.0" promptText="IP ADDRESS" style="-fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-padding: 0 0 0 15px; -fx-background-radius: 20px;" />
+      <TextField fx:id="portInput" layoutX="475.0" layoutY="210.0" prefHeight="40.0" prefWidth="200.0" promptText="PORT" style="-fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-padding: 0 0 0 15px; -fx-background-radius: 20px;">
          <font>
             <Font name="Segoe UI" size="14.0" />
          </font>
@@ -79,5 +79,25 @@
             <Font name="Segoe UI" size="12.0" />
          </font>
       </Label>
+      <Button fx:id="btnPlayAgain" layoutX="510.0" layoutY="200.0" mnemonicParsing="false" onAction="#playAgainClicked" prefHeight="46.0" prefWidth="132.0" style="-fx-background-color: #3F2CB6; -fx-background-radius: 25px;" text="PLAY AGAIN" textFill="WHITE" visible="false">
+         <font>
+            <Font name="Segoe UI Bold" size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="alertExit" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="110.0" prefHeight="180.0" prefWidth="400.0" style="-fx-background-color: #ffffff; -fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-background-radius: 20px;" text="Do you really want to EXIT?" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" visible="false">
+         <font>
+            <Font name="Segoe UI Bold" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnAlertExitNo" layoutX="440.0" layoutY="240.0" mnemonicParsing="false" onAction="#noClicked" style="-fx-background-color: #ffffff; -fx-padding: 8px 15px; -fx-border-color: #000000; -fx-border-radius: 10px;" text="No" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnAlertExitYes" layoutX="500.0" layoutY="240.0" mnemonicParsing="false" onAction="#yesClicked" style="-fx-background-color: #ffffff; -fx-border-color: #ff0000; -fx-border-radius: 10px; -fx-padding: 8px 15px;" text="Yes" textFill="RED" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

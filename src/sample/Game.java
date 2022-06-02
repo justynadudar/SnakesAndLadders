@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,24 +9,30 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
-import javafx.stage.Popup;
+import javafx.util.Duration;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Game implements Runnable{
 
     @FXML
     private Label alert;
+
+    @FXML
+    private Label alertExit;
+
+    @FXML
+    private Button btnAlertExitNo;
+
+    @FXML
+    private Button btnAlertExitYes;
 
     @FXML
     private Button btnExit;
@@ -34,6 +42,9 @@ public class Game implements Runnable{
 
     @FXML
     private Button btnRoll;
+
+    @FXML
+    private Button btnPlayAgain;
 
     @FXML
     private ImageView dice;
@@ -61,9 +72,8 @@ public class Game implements Runnable{
     Player playerBlue;
     Player playerYellow;
 
-    private String ip = "localhost";
-    private int port = 3000;
-    private Scanner scanner = new Scanner(System.in);
+    private String ip;
+    private int port;
     private Thread thread;
     private Socket socket;
     private DataOutputStream dos;
@@ -72,6 +82,18 @@ public class Game implements Runnable{
     private boolean accepted = false;
     private boolean yourTurn = false;
     private boolean enemyTurn = true;
+
+    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), ev -> {
+            textBeforeValue.setFill(Color.rgb(251, 186, 19));
+            dice.setImage(Dice.getDiceImages().get(0));
+            textDiceValue.setVisible(false);
+            textBeforeValue.setLayoutX(490);
+            textBeforeValue.setText("Opponent move!");
+    }));
+
+    public Game(){
+        timeline.setCycleCount(1);
+    }
 
     @Override
     public void run() {
@@ -85,20 +107,24 @@ public class Game implements Runnable{
 
     private void opponentMove() {
         System.out.println();
-        if (!yourTurn) {
+        if (!yourTurn && dis != null) {
+            timeline.stop();
             try {
                 int enemyDiceValue = dis.readInt();
                 if(enemyDiceValue == 7) {
-                    playerYellow.getPlayerImage().setLayoutX(playerYellow.getTileThePlayerIsOn().getX());
-                    playerYellow.getPlayerImage().setLayoutY(playerYellow.getTileThePlayerIsOn().getY());
+                    playerYellow.getPlayerImage().setLayoutX(board.get(99).getX());
+                    playerYellow.getPlayerImage().setLayoutY(board.get(99).getY());
                     textBeforeValue.setFill(Color.rgb(251, 186, 19));
                     textDiceValue.setFill(Color.rgb(251, 186, 19));
-                    btnPlay.setVisible(true);
+                    btnPlay.setVisible(false);
                     btnRoll.setVisible(false);
                     btnExit.setVisible(false);
+                    btnPlayAgain.setVisible(true);
                     dice.setVisible(false);
                     textDiceValue.setVisible(false);
-                    textBeforeValue.setText("  You lose!");
+                    textBeforeValue.setLayoutX(525);
+                    textBeforeValue.setText("You lose!");
+
                 }
                 else{
                     changeDiceImageAndText(enemyDiceValue);
@@ -109,6 +135,16 @@ public class Game implements Runnable{
                     textDiceValue.setLayoutX(665);
                     textDiceValue.setVisible(true);
                     textBeforeValue.setText("Opponent rolled:");
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    textBeforeValue.setFill(Color.rgb(63, 44, 182));
+                    textBeforeValue.setLayoutX(505);
+                    textDiceValue.setVisible(false);
+                    dice.setImage(Dice.getDiceImages().get(0));
+                    textBeforeValue.setText("  Your move!");
                     yourTurn = true;
                 }
 
@@ -131,6 +167,7 @@ public class Game implements Runnable{
             playerYellow.setTileThePlayerIsOn(board.get(0));
             playerYellow.getPlayerImage().setLayoutX(board.get(0).getX());
             playerYellow.getPlayerImage().setLayoutY(board.get(0).getY());
+            textBeforeValue.setLayoutX(505);
             textBeforeValue.setText("  Your move!");
         } catch (IOException e) {
             e.printStackTrace();
@@ -198,11 +235,15 @@ public class Game implements Runnable{
     void changeDiceImageAndText(int value){
         textDiceValue.setText(String.valueOf(value));
         dice.setImage(Dice.getDiceImages().get(value));
-        textDiceValue.setText(String.valueOf(value));
     }
 
     void changeTile(int diceValue, Player player){
         int previousTileIndex = board.indexOf(player.getTileThePlayerIsOn());
+        if(player.getTileThePlayerIsOn().getId() == 1 && diceValue != 6){
+            player.getPlayerImage().setLayoutX(board.get(0).getX());
+            player.getPlayerImage().setLayoutY(board.get(0).getY());
+            return;
+        }
 
         if(previousTileIndex+diceValue > 99) player.setTileThePlayerIsOn(board.get(previousTileIndex));
         else player.setTileThePlayerIsOn(board.get(previousTileIndex+diceValue));
@@ -214,14 +255,16 @@ public class Game implements Runnable{
             player.setTileThePlayerIsOn(player.getTileThePlayerIsOn().getLadder().endTile);
         }
 
+
         player.getPlayerImage().setLayoutX(player.getTileThePlayerIsOn().getX());
         player.getPlayerImage().setLayoutY(player.getTileThePlayerIsOn().getY());
 
         if(player.getTileThePlayerIsOn().getId() == 100){
             yourTurn = false;
-            btnPlay.setVisible(true);
+            btnPlay.setVisible(false);
             btnRoll.setVisible(false);
             btnExit.setVisible(false);
+            btnPlayAgain.setVisible(true);
             dice.setVisible(false);
             textDiceValue.setVisible(false);
             textBeforeValue.setText("    You win!");
@@ -231,75 +274,136 @@ public class Game implements Runnable{
     @FXML
     void playClicked(ActionEvent event) {
         if(ipInput.getText().length() == 0 || portInput.getText().length() == 0){
-            System.out.println("You have to write ip and port");
             alert.setVisible(true);
         }else{
             alert.setVisible(false);
             initializeBoard();
             ip = ipInput.getText();
             port = Integer.parseInt(portInput.getText());
-            while (port < 1 || port > 65535) {
-                System.out.println("The port you entered was invalid, please input another port: ");
-                port = scanner.nextInt();
+            if (port < 1 || port > 65535) {
+                alert.setText("The port you entered is invalid");
+                alert.setVisible(true);
             }
+            try{
+                    InetAddress.getByName(ip);
+                if (!connect()) initializeServer();
+                thread = new Thread(this, "Game");
+                thread.start();
 
-            if (!connect()) initializeServer();
-            thread = new Thread(this, "Game");
-            thread.start();
+                btnPlay.setVisible(false);
+                btnRoll.setVisible(true);
+                btnExit.setVisible(true);
+                textBeforeValue.setVisible(true);
+                dice.setVisible(true);
+                dice.setImage(Dice.getDiceImages().get(0));
+                ipInput.setVisible(false);
+                portInput.setVisible(false);
 
-            btnPlay.setVisible(false);
-            btnRoll.setVisible(true);
-            btnExit.setVisible(true);
-            textBeforeValue.setVisible(true);
-            dice.setImage(Dice.getDiceImages().get(0));
-            ipInput.setVisible(false);
-            portInput.setVisible(false);
+                if(!enemyTurn && !accepted){
+                    textBeforeValue.setFill(Color.rgb(63, 44, 182));
+                    textBeforeValue.setText("Waiting for opponnent...");
+                    textBeforeValue.setLayoutX(445);
+                    playerBlue = new Player(playerBlueImage);
+                    playerBlueImage.setVisible(true);
+                    playerBlue.setTileThePlayerIsOn(board.get(0));
+                    playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
+                    playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
+                }else{
+                    if(enemyTurn){
+                        textBeforeValue.setFill(Color.rgb(251, 186, 19));
+                        textBeforeValue.setLayoutX(490);
+                        textBeforeValue.setText("Opponent move!");
+                    }
+                    else{
+                        textBeforeValue.setLayoutX(505);
+                        textBeforeValue.setText("  Your move!");
+                    }
+                    playerYellow = new Player(playerYellowImage);
+                    playerYellowImage.setVisible(true);
+                    playerBlue = new Player(playerBlueImage);
+                    playerBlueImage.setVisible(true);
+                    playerBlue.setTileThePlayerIsOn(board.get(0));
+                    playerYellow.setTileThePlayerIsOn(board.get(0));
 
-            if(!enemyTurn && !accepted){
-                textBeforeValue.setText("Waiting for opponnent...");
-                textBeforeValue.setLayoutX(445);
-                playerBlue = new Player(playerBlueImage);
-                playerBlueImage.setVisible(true);
-                playerBlue.setTileThePlayerIsOn(board.get(0));
-                playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
-                playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
-            }else{
-                if(enemyTurn){
-                    textBeforeValue.setLayoutX(495);
-                    textBeforeValue.setText("Opponent move!");
+                    playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
+                    playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
+                    playerYellow.getPlayerImage().setLayoutX(board.get(0).getX());
+                    playerYellow.getPlayerImage().setLayoutY(board.get(0).getY());
                 }
-                else textBeforeValue.setText("  Your move!");
-                playerYellow = new Player(playerYellowImage);
-                playerYellowImage.setVisible(true);
-                playerBlue = new Player(playerBlueImage);
-                playerBlueImage.setVisible(true);
-                playerBlue.setTileThePlayerIsOn(board.get(0));
-                playerYellow.setTileThePlayerIsOn(board.get(0));
+                } catch (UnknownHostException e) {
+                    alert.setText("The IP you entered is invalid");
+                    alert.setVisible(true);
+                }
 
-                playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
-                playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
-                playerYellow.getPlayerImage().setLayoutX(board.get(0).getX());
-                playerYellow.getPlayerImage().setLayoutY(board.get(0).getY());
-            }
+
         }
 
 
     }
 
     @FXML
+    void playAgainClicked(ActionEvent event) {
+        textBeforeValue.setVisible(false);
+        btnPlayAgain.setVisible(false);
+        timeline.stop();
+
+        if(serverSocket != null){
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if(socket != null){
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        dis = null;
+        dos = null;
+
+        playerBlue = null;
+        playerYellow = null;
+        accepted = false;
+        yourTurn = false;
+        enemyTurn = true;
+
+        ipInput.setVisible(true);
+        portInput.setVisible(true);
+        btnPlay.setVisible(true);
+        thread.stop();
+    }
+
+    @FXML
     void exitClicked(ActionEvent event) {
+        alertExit.setVisible(true);
+        btnAlertExitNo.setVisible(true);
+        btnAlertExitYes.setVisible(true);
+        btnRoll.setDisable(true);
+        btnExit.setDisable(true);
+    }
 
-        //TODO POP UP TO ASK "Do you really want to EXIT?"
+    @FXML
+    void noClicked(ActionEvent event) {
+        alertExit.setVisible(false);
+        btnAlertExitNo.setVisible(false);
+        btnAlertExitYes.setVisible(false);
+        btnRoll.setDisable(false);
+        btnExit.setDisable(false);
+    }
 
+    @FXML
+    void yesClicked(ActionEvent event) {
         Platform.exit();
         System.exit(0);
     }
 
     @FXML
     void rollClicked(ActionEvent event) {
-
         if(accepted){
-            Player player = playerBlue;;
+            Player player = playerBlue;
             if(yourTurn) {
                 textBeforeValue.setFill(Color.rgb(63, 44, 182));
                 textDiceValue.setFill(Color.rgb(63, 44, 182));
@@ -345,6 +449,7 @@ public class Game implements Runnable{
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
+                    timeline.play();
                 }else{
                     try {
                         dos.writeInt(7);
@@ -353,7 +458,6 @@ public class Game implements Runnable{
                         e1.printStackTrace();
                     }
                 }
-
             }
         }
     }
