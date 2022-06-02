@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+    protected static Stage stage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        this.stage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.getIcons().add(new Image("/resources/Component 2.png"));
         primaryStage.setTitle("Snakes and Ladders");

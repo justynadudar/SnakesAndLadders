@@ -2,8 +2,8 @@ package sample;
 
 public class Tile {
     private int id, x, y;
-    private Snake snake = null;
-    private Ladder ladder = null;
+    private LadderSnakeTile snake = null;
+    private LadderSnakeTile ladder = null;
 
     public Tile(int id, int x, int y){
         this.id = id;
@@ -11,25 +11,19 @@ public class Tile {
         this.y = y;
     }
 
-    public Tile(int id, int x, int y, Snake snake, Ladder ladder){
-        this.id = id;
-        this.x = x;
-        this.y = y;
-    }
-
-    public void setSnake(Snake snake) {
+    public void setSnake(LadderSnakeTile snake) {
         this.snake = snake;
     }
 
-    public void setLadder(Ladder ladder) {
+    public void setLadder(LadderSnakeTile ladder) {
         this.ladder = ladder;
     }
 
-    public Snake getSnake() {
+    public LadderSnakeTile getSnake() {
         return snake;
     }
 
-    public Ladder getLadder() {
+    public LadderSnakeTile getLadder() {
         return ladder;
     }
 
