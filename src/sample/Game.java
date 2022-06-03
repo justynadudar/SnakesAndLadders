@@ -279,61 +279,70 @@ public class Game implements Runnable{
             alert.setVisible(false);
             initializeBoard();
             ip = ipInput.getText();
-            port = Integer.parseInt(portInput.getText());
-            if (port < 1 || port > 65535) {
+            if(portInput.getText().length() > 5){
+                alert.setPrefWidth(170);
                 alert.setText("The port you entered is invalid");
                 alert.setVisible(true);
+            }else{
+                port = Integer.parseInt(portInput.getText());
             }
-            try{
+            if (port < 1 || port > 65535) {
+                alert.setPrefWidth(170);
+                alert.setText("The port you entered is invalid");
+                alert.setVisible(true);
+            }else{
+                try{
                     InetAddress.getByName(ip);
-                if (!connect()) initializeServer();
-                thread = new Thread(this, "Game");
-                thread.start();
+                    if (!connect()) initializeServer();
+                    thread = new Thread(this, "Game");
+                    thread.start();
 
-                btnPlay.setVisible(false);
-                btnRoll.setVisible(true);
-                btnExit.setVisible(true);
-                textBeforeValue.setVisible(true);
-                dice.setVisible(true);
-                dice.setImage(Dice.getDiceImages().get(0));
-                ipInput.setVisible(false);
-                portInput.setVisible(false);
+                    btnPlay.setVisible(false);
+                    btnRoll.setVisible(true);
+                    btnExit.setVisible(true);
+                    textBeforeValue.setVisible(true);
+                    dice.setVisible(true);
+                    dice.setImage(Dice.getDiceImages().get(0));
+                    ipInput.setVisible(false);
+                    portInput.setVisible(false);
 
-                if(!enemyTurn && !accepted){
-                    textBeforeValue.setFill(Color.rgb(63, 44, 182));
-                    textBeforeValue.setText("Waiting for opponnent...");
-                    textBeforeValue.setLayoutX(445);
-                    playerBlue = new Player(playerBlueImage);
-                    playerBlueImage.setVisible(true);
-                    playerBlue.setTileThePlayerIsOn(board.get(0));
-                    playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
-                    playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
-                }else{
-                    if(enemyTurn){
-                        textBeforeValue.setFill(Color.rgb(251, 186, 19));
-                        textBeforeValue.setLayoutX(490);
-                        textBeforeValue.setText("Opponent move!");
+                    if(!enemyTurn && !accepted){
+                        textBeforeValue.setFill(Color.rgb(63, 44, 182));
+                        textBeforeValue.setText("Waiting for opponnent...");
+                        textBeforeValue.setLayoutX(445);
+                        playerBlue = new Player(playerBlueImage);
+                        playerBlueImage.setVisible(true);
+                        playerBlue.setTileThePlayerIsOn(board.get(0));
+                        playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
+                        playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
+                    }else{
+                        if(enemyTurn){
+                            textBeforeValue.setFill(Color.rgb(251, 186, 19));
+                            textBeforeValue.setLayoutX(490);
+                            textBeforeValue.setText("Opponent move!");
+                        }
+                        else{
+                            textBeforeValue.setLayoutX(505);
+                            textBeforeValue.setText("  Your move!");
+                        }
+                        playerYellow = new Player(playerYellowImage);
+                        playerYellowImage.setVisible(true);
+                        playerBlue = new Player(playerBlueImage);
+                        playerBlueImage.setVisible(true);
+                        playerBlue.setTileThePlayerIsOn(board.get(0));
+                        playerYellow.setTileThePlayerIsOn(board.get(0));
+
+                        playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
+                        playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
+                        playerYellow.getPlayerImage().setLayoutX(board.get(0).getX());
+                        playerYellow.getPlayerImage().setLayoutY(board.get(0).getY());
                     }
-                    else{
-                        textBeforeValue.setLayoutX(505);
-                        textBeforeValue.setText("  Your move!");
-                    }
-                    playerYellow = new Player(playerYellowImage);
-                    playerYellowImage.setVisible(true);
-                    playerBlue = new Player(playerBlueImage);
-                    playerBlueImage.setVisible(true);
-                    playerBlue.setTileThePlayerIsOn(board.get(0));
-                    playerYellow.setTileThePlayerIsOn(board.get(0));
-
-                    playerBlue.getPlayerImage().setLayoutX(board.get(0).getX());
-                    playerBlue.getPlayerImage().setLayoutY(board.get(0).getY());
-                    playerYellow.getPlayerImage().setLayoutX(board.get(0).getX());
-                    playerYellow.getPlayerImage().setLayoutY(board.get(0).getY());
-                }
                 } catch (UnknownHostException e) {
                     alert.setText("The IP you entered is invalid");
                     alert.setVisible(true);
                 }
+            }
+
 
 
         }
