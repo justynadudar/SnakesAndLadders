@@ -79,7 +79,7 @@
             <Font name="Segoe UI" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="btnPlayAgain" layoutX="510.0" layoutY="200.0" mnemonicParsing="false" onAction="#playAgainClicked" prefHeight="46.0" prefWidth="132.0" style="-fx-background-color: #3F2CB6; -fx-background-radius: 25px;" text="PLAY AGAIN" textFill="WHITE" visible="false">
+      <Button fx:id="btnPlayAgain" layoutX="510.0" layoutY="150.0" mnemonicParsing="false" onAction="#playAgainClicked" prefHeight="46.0" prefWidth="132.0" style="-fx-background-color: #3F2CB6; -fx-background-radius: 25px;" text="PLAY AGAIN" textFill="WHITE" visible="false">
          <font>
             <Font name="Segoe UI Bold" size="18.0" />
          </font>
@@ -99,5 +99,10 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <Label fx:id="alertOpponentLeft" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="110.0" prefHeight="180.0" prefWidth="400.0" style="-fx-background-color: #ffffff; -fx-border-color: #3F2CB6; -fx-border-radius: 20px; -fx-background-radius: 20px;" text="Your opponent left." textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" visible="false">
+         <font>
+            <Font name="Segoe UI Bold" size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
