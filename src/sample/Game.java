@@ -109,7 +109,6 @@ public class Game implements Runnable {
     }
 
     private void opponentMove () {
-        System.out.println ();
         int enemyDiceValue = 0;
         if (dis != null) {
             try {
@@ -144,8 +143,8 @@ public class Game implements Runnable {
                 textDiceValue.setFill (Color.rgb (251, 186, 19));
                 btnPlay.setVisible (false);
                 btnRoll.setVisible (false);
-                btnExit.setLayoutX (510);
-                btnExit.setLayoutY (266);
+                btnExit.setLayoutX (514);
+                btnExit.setLayoutY (216);
                 btnPlayAgain.setVisible (true);
                 dice.setVisible (false);
                 textDiceValue.setVisible (false);
@@ -239,17 +238,17 @@ public class Game implements Runnable {
             } else x += operation;
         }
 
-        LadderSnakeTile snake1 = new LadderSnakeTile (board.get (19));
+        LadderSnakeEndTile snake1 = new LadderSnakeEndTile (board.get (19));
         board.get (58).setSnake (snake1);
-        LadderSnakeTile snake2 = new LadderSnakeTile (board.get (66));
+        LadderSnakeEndTile snake2 = new LadderSnakeEndTile (board.get (66));
         board.get (94).setSnake (snake2);
-        LadderSnakeTile ladder1 = new LadderSnakeTile (board.get (28));
+        LadderSnakeEndTile ladder1 = new LadderSnakeEndTile (board.get (28));
         board.get (6).setLadder (ladder1);
-        LadderSnakeTile ladder2 = new LadderSnakeTile (board.get (43));
+        LadderSnakeEndTile ladder2 = new LadderSnakeEndTile (board.get (43));
         board.get (35).setLadder (ladder2);
-        LadderSnakeTile ladder3 = new LadderSnakeTile (board.get (51));
+        LadderSnakeEndTile ladder3 = new LadderSnakeEndTile (board.get (51));
         board.get (47).setLadder (ladder3);
-        LadderSnakeTile ladder4 = new LadderSnakeTile (board.get (81));
+        LadderSnakeEndTile ladder4 = new LadderSnakeEndTile (board.get (81));
         board.get (63).setLadder (ladder4);
     }
 
@@ -286,8 +285,9 @@ public class Game implements Runnable {
             yourTurn = false;
             btnPlay.setVisible (false);
             btnRoll.setVisible (false);
-            btnExit.setVisible (false);
             btnPlayAgain.setVisible (true);
+            btnExit.setLayoutX (514);
+            btnExit.setLayoutY (216);
             dice.setVisible (false);
             textDiceValue.setVisible (false);
             textBeforeValue.setText ("    You win!");
@@ -366,11 +366,7 @@ public class Game implements Runnable {
                     alert.setVisible (true);
                 }
             }
-
-
         }
-
-
     }
 
     @FXML
