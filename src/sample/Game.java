@@ -85,6 +85,7 @@ public class Game implements Runnable {
     private boolean accepted = false;
     private boolean yourTurn = false;
     private boolean enemyTurn = true;
+    private boolean opponentLeft = false;
 
     Timeline timeline = new Timeline (new KeyFrame (Duration.millis (1500), ev -> {
         textBeforeValue.setFill (Color.rgb (251, 186, 19));
@@ -101,7 +102,7 @@ public class Game implements Runnable {
     @Override
     public void run () {
         while (true) {
-            opponentMove ();
+            if(!opponentLeft) opponentMove ();
             if (!enemyTurn && !accepted) {
                 listenForServerRequest ();
             }
@@ -109,6 +110,7 @@ public class Game implements Runnable {
     }
 
     private void opponentMove () {
+        System.out.println("");
         int enemyDiceValue = 0;
         if (dis != null) {
             try {
@@ -126,6 +128,7 @@ public class Game implements Runnable {
                     btnPlayAgain.setVisible (true);
                     dice.setVisible (false);
                     textDiceValue.setVisible (false);
+                    opponentLeft = true;
                     return;
                 }
             } catch (IOException e) {
